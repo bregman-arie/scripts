@@ -11,6 +11,9 @@ HOME = os.path.expanduser('~')
 ALIASES = {
            'dsneutron':
            'git clone https://codeng/gerrit/p/neutron.git',
+           
+           'jjbu':
+           'jenkins-jobs --conf component/config.ini update',
 
            'oi-pc':
            'git clone https://github.com/openstack-infra/project-config.git',
