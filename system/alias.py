@@ -9,17 +9,54 @@ LOG = logging.getLogger(__name__)
 
 HOME = os.path.expanduser('~')
 ALIASES = {
+           'd':
+           'date',
+
            'dsneutron':
            'git clone https://codeng/gerrit/p/neutron.git',
-           
+
+           'g':
+           'grep -R -i',
+
+           'ga':
+           'git add',
+
+           'gfa':
+           'git fetch upstream',
+
+           'gl':
+           'git log',
+
+           'gri':
+           'git rebase -i',
+
+           'gs':
+           'git show',
+
            'jjbu':
            'jenkins-jobs --conf component/config.ini update',
+
+           'nosetests':
+           'nt',
+
+           'oi-ia':
+           'git clone https://github.com/openstack-infra/infra-ansible.git',
 
            'oi-pc':
            'git clone https://github.com/openstack-infra/project-config.git',
 
+           'r':
+           'rsync -azv',
+
+           'tox27':
+           'tox -e py27',
+
+           'tox8':
+           'tox -e pep8',
+
            'usneutron':
            'git clone git://git.openstack.org/openstack/neutron.git'
+           
           }
 
 ALIAS_F = {
