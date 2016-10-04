@@ -27,14 +27,15 @@ import wget
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 
 
-def retrieve_image(image_url):
+def retrieve_image(cloud, image_url):
     """Downloads Software factory image."""
     image_name = image_url.rsplit('/', 1)[-1]
-    if not os.path.exists(os.getcwd() + '/' + image_name):
+    if (not os.path.exists(os.getcwd() + '/' + image_name)
+        and not cloud.get_image(image_name)):
         logging.info("== Downloading software factory image ==")
         wget.download(image_url)
     else:
-        logging.info("Image already exists locally...skipping image download")
+        logging.info("Image already exists...skipping image download")
 
     return image_name
 
@@ -72,7 +73,7 @@ def create_sf_heat_stack(cloud, stack_name, template_name,
                          key, img_id, external_net):
     logging.info("== Creating stack! This might take couple of minutes... ==")
     cloud.create_stack(stack_name, template_file=template_name,
-                       wait=False, key_name=key, image_id=img_id,
+                       wait=True, key_name=key, image_id=img_id,
                        ext_net_uuid=external_net)
     logging.info("== Done! You can start using Software Factory ==")
 
@@ -106,7 +107,7 @@ def main():
     # Initialize cloud
     cloud = shade.openstack_cloud(cloud=args.cloud)
 
-    img_name = retrieve_image(args.image_url)
+    img_name = retrieve_image(cloud, args.image_url)
     image_id = upload_image(cloud, img_name)
     ext_net_uuid = get_network_id(cloud, args.external_net)
 
