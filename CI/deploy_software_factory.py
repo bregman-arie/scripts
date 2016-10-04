@@ -46,9 +46,13 @@ def upload_image(cloud, img_name):
         logging.info("== Uploading the image ==")
         cloud.create_image(img_name, filename=img_name, wait=True)
 
+    return cloud.get_image(img_name)['id']
+
 
 def retrieve_heat_template(template_url):
+    '''Returns the name of the heat template'''
     template_name = template_url.rsplit('/', 1)[-1]
+
     if not os.path.exists(os.getcwd() + '/' + template_name):
         logging.info("== Downloading heat template ==")
         wget.download(template_url)
@@ -56,11 +60,22 @@ def retrieve_heat_template(template_url):
         logging.info(
             "Heat template already exists...skipping template download")
 
+    return template_name
 
-def create_sf_heat_stack(cloud):
+
+def get_network_id(cloud, external_network):
+    """Returns external network id."""
+    return cloud.get_network(external_network)['id']
+
+
+def create_sf_heat_stack(cloud, stack_name, template_name,
+                         key, img_id, external_net):
     logging.info("== Creating stack! This might take couple of minutes... ==")
-    cloud.create_stack(STACK_NAME, template_file=HEAT_TEMPLATE_NAME, wait=False, key_name=KEY_NAME)
-    #heat stack-create --template-file ./softwarefactory-C7.0-2.2.3-allinone.hot -P "key_name=SSH_KEY;domain=FQDN;im$age_id=GLANCE_UUID;external_network=NETWORK_UUID;flavor=m1.large" sf_stack
+    cloud.create_stack(stack_name, template_file=template_name,
+                       wait=False, key_name=key, image_id=img_id,
+                       ext_net_uuid=external_net)
+    logging.info("== Done! You can start using Software Factory ==")
+
 
 def create_parser():
     """Returns argument parser."""
@@ -75,8 +90,11 @@ def create_parser():
                         default='http://46.231.132.68:8080/v1/AUTH_b50e80d3969f441a8b7b1fe831003e0a/sf-images/softwarefactory-C7.0-2.2.3.img.qcow2')
     parser.add_argument('--template_url', required=False, dest="template_url",
                         default='http://46.231.132.68:8080/v1/AUTH_b50e80d3969f441a8b7b1fe831003e0a/sf-images/softwarefactory-C7.0-2.2.3-allinone.hot')
-    parser.add_argument('--stack_name', required=False, dest="template_url",
-                        default='http://46.231.132.68:8080/v1/AUTH_b50e80d3969f441a8b7b1fe831003e0a/sf-images/softwarefactory-C7.0-2.2.3-allinone.hot')
+    parser.add_argument('--stack_name', required=False, dest="stack_name",
+                        default='software-factory-stack')
+    parser.add_argument('--key_name', required=False, dest="key_name",
+                        default='rhos-jenkins')
+    parser.add_argument('--external_net', required=True, dest="external_net")
 
     return parser
 
@@ -89,10 +107,12 @@ def main():
     cloud = shade.openstack_cloud(cloud=args.cloud)
 
     img_name = retrieve_image(args.image_url)
-    upload_image(cloud, img_name)
+    image_id = upload_image(cloud, img_name)
+    ext_net_uuid = get_network_id(cloud, args.external_net)
 
-    retrieve_heat_template(args.template_url)
-    create_sf_heat_stack(cloud)
+    template_name = retrieve_heat_template(args.template_url)
+    create_sf_heat_stack(cloud, args.stack_name, template_name,
+                         args.key_name, image_id, ext_net_uuid)
 
 if __name__ == '__main__':
     main()
