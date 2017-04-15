@@ -4,10 +4,20 @@ echo "Updating the system...this might take a while"""
 sudo dnf -y update
 
 echo "Install packages"
-sudo dnf install -y xchat-gnome NetworkManager-openvpn NetworkManager-openvpn-gnome smartctl git git-review
+sudo dnf install -y xchat-gnome NetworkManager-openvpn NetworkManager-openvpn-gnome smartctl git git-review virtualenv redhat-rpm-config
 
 echo "Install oh-my-zsh"
 sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+
+# CI packages
+while true; do
+    read -p "Do you wish to install CI/CD packages? [Yy/Nn]" ci_install
+    case $ci_install in
+        [Yy]* ) sudo dnf install -y groovy python-jenkins-jobs-builder; break;;
+        [Nn]* ) break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
 
 echo "VIM time!"
 sudo dnf install vim ctags
