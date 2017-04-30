@@ -19,6 +19,18 @@ while true; do
     esac
 done
 
+# Web development
+while true; do
+    read -p "Do you wish to install web development packages? [Yy/Nn]" web_install
+    case $web_install in
+        [Yy]* ) sudo npm install -g bower; sudo npm install -g grunt-cli break;;
+        [Nn]* ) break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+# Web development
+
 echo "VIM time!"
 sudo dnf install vim ctags
 wget https://raw.githubusercontent.com/tao12345666333/vim/master/vimrc -O $HOME/.vimrc
