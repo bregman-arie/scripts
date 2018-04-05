@@ -30,8 +30,8 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 def retrieve_image(cloud, image_url):
     """Downloads Software factory image."""
     image_name = image_url.rsplit('/', 1)[-1]
-    if (not os.path.exists(os.getcwd() + '/' + image_name)
-        and not cloud.get_image(image_name)):
+    if (not os.path.exists(os.getcwd() + '/' + image_name) and
+        not cloud.get_image(image_name)):
         logging.info("== Downloading software factory image ==")
         wget.download(image_url)
     else:
