@@ -16,7 +16,7 @@ import sys
 import re
 
 OVS_TO_OSP = {'2.9': '13',
-              '2': '12',
+              '2': ['12', '13'],
               'DEFAULT': '11'}
 
 
@@ -37,10 +37,17 @@ def main():
         if ver in OVS_TO_OSP:
             osp = OVS_TO_OSP[ver]
             ver = ''
-        ver = ver[:-2]
+        ver = ver[:-1]
     if not osp:
-        print(OVS_TO_OSP['DEFAULT'])
-    print(osp)
+        if OVS_TO_OSP is list:
+            print(", ".join(OVS_TO_OSP['DEFAULT']))
+        else:
+            print(OVS_TO_OSP['DEFAULT'])
+    else:
+        if isinstance(osp, list):
+            print(", ".join(osp))
+        else:
+            print(osp)
 
 
 if __name__ == '__main__':
