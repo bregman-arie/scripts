@@ -1,1 +1,2 @@
-keystone
+keystoneauth1
+python-heatclient
