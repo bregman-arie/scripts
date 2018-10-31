@@ -25,7 +25,8 @@ ALIASES = {
     'usneutron': 'git clone git://git.openstack.org/openstack/neutron.git',
     'v': "virtualenv",
     'pi': "sudo pip install",
-    'pu': "sudo pip uninstall"
+    'pu': "sudo pip uninstall",
+    'unin': "pip uninstall -y ${PWD##*/}  && pip install .",
 }
 
 
