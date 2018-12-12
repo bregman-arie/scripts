@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  tasks:
+      - name: Create file
+        file:
+            name: "{{ name }}"
+            state: 'touch'
