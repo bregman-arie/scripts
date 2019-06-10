@@ -26,6 +26,7 @@ ALIASES = {
     'v': "virtualenv",
     'pi': "sudo pip install",
     'pu': "sudo pip uninstall",
+    'sync': "git pull upstream master && git push origin",
     'unin': "pip uninstall -y ${PWD##*/}  && pip install .",
 }
 
