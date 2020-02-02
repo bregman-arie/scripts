@@ -365,7 +365,7 @@ nmap <leader>e :Errors<CR>
 nmap <leader>n :lnext<CR>
 nmap <leader>p :lprevious<CR>
 " check also when just opened the file
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 " syntastic checker for javascript.
 " eslint is the only tool support JSX.
 " If you don't need write JSX, you can use jshint.
