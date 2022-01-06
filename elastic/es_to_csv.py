@@ -18,13 +18,13 @@ client = gspread.authorize(creds)
 general_sheet = client.open("jenkins jobs").sheet1
 data = general_sheet.get_all_records()
 
-fields = ["network_backend", "dvr", "overcloud_ssl", "storage_backend", "topology"]
+fields = ["network_backend", "dvr", "overcloud_ssl", "storage_backend", "topology", "ip_version", "ovn", "ovs"]
 
 body={
     "query": {
         "bool": {
             "must_not": {
-                    "range": {"@timestamp": {"lte": "now-7d/d"}},
+                    "range": {"@timestamp": {"lte": "now-14d/d"}},
             },
             "should": [{"exists": {"field": field}} for field in fields]
         }
@@ -58,7 +58,7 @@ for res in results['hits']['hits']:
         jobs[res['_source']['job_name']][k] = v
 
 cells_li = []
-cells_li.append(Cell(row=1, col=1 , value="This spreadsheet is auto-generated based on data from ELK from the past 7 days. PLEASE DON'T EDIT MANUALLY :)"))
+cells_li.append(Cell(row=1, col=1 , value="This spreadsheet is auto-generated based on data from ELK from the past 14 days. PLEASE DON'T EDIT MANUALLY :)"))
 cells_li.append(Cell(row=2, col=1 , value="Last update: {} (Israel Time)".format(str(datetime.datetime.now()))))
 i = 4
 for job, values in jobs.items():
