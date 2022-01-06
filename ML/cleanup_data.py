@@ -31,3 +31,5 @@ df_less_qunt_outliers = df_less_negative_values[df_less_negative_values["Qunt"] 
 # Remove outliers in "Total(Ton)" column
 # First I checked for std with df_less_negative_values["Total(Ton)"].describe()
 df_less_qunt_outliers[df_less_qunt_outliers['Total(Ton)'] < 50]
+
+df.to_csv('output.csv')
